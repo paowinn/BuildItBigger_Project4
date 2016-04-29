@@ -1,12 +1,14 @@
 package com.udacity.gradle.builditbigger;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+
 import com.example.JavaJoker;
+import com.example.alvarpao.jokesdisplay.JokeActivity;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -41,8 +43,12 @@ public class MainActivity extends ActionBarActivity {
 
     public void tellJoke(View view){
 
+        // Joke source -> created Java library
         JavaJoker javaJoker = new JavaJoker();
-        Toast.makeText(this, javaJoker.tellFunnyJoke(), Toast.LENGTH_SHORT).show();
+        // Display Java joke using activity in created Android library
+        Intent jokeIntent = new Intent(this, JokeActivity.class);
+        jokeIntent.putExtra(JokeActivity.JOKE_KEY, javaJoker.tellFunnyJoke());
+        startActivity(jokeIntent);
     }
 
 

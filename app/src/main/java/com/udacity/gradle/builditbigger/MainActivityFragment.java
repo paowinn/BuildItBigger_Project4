@@ -9,10 +9,6 @@ import android.view.ViewGroup;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-
-/**
- * A placeholder fragment containing a simple view.
- */
 public class MainActivityFragment extends Fragment {
 
     public MainActivityFragment() {
@@ -27,6 +23,8 @@ public class MainActivityFragment extends Fragment {
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
         // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+
+        // Add device IDs for the 3 test devices used
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("81CE8DD28F612B82D5C6450ADF060F75")
