@@ -44,12 +44,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1>Hello, Endpoints!</h1>
-                <p>Enter your name and press the button below to call your Google Cloud Endpoints API.</p>
+                <p>Press the button below to call your Google Cloud Endpoints API.</p>
                 <form>
                     <div class="input-group">
-                        <input type="text" class="form-control input-lg" placeholder="Name" id="nameInput" />
                           <span class="input-group-btn">
-                             <button class="btn btn-default btn-primary btn-group btn-lg" type="submit" id="helloButton">Say "Hello" &raquo;</button>
+                             <button class="btn btn-default btn-primary btn-group btn-lg" type="submit" id="jokeButton">Get Joke! &raquo;</button>
                           </span>
                     </div>
                 </form>
@@ -66,10 +65,9 @@
 </div>
 
 <script type="text/javascript">
-    // A function that attaches a "Say Hello" button click handler
+    // A function that attaches a "Get Joke!" button click handler
     function enableClick() {
-      document.getElementById('helloButton').onclick = function() {
-        var name = document.getElementById('nameInput').value;
+      document.getElementById('jokeButton').onclick = function() {
         gapi.client.myApi.getJoke().execute(
           function(response) {
             var outputAlertDiv = document.getElementById('outputAlert');
