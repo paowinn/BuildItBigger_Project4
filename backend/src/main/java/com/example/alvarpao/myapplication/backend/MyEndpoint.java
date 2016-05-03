@@ -6,11 +6,10 @@
 
 package com.example.alvarpao.myapplication.backend;
 
+import com.example.JavaJoker;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
-
-import javax.inject.Named;
 
 /** An endpoint class we are exposing */
 @Api(
@@ -24,11 +23,14 @@ import javax.inject.Named;
 )
 public class MyEndpoint {
 
-    /** A simple endpoint method that takes a name and says Hi back */
-    @ApiMethod(name = "sayHi")
-    public MyBean sayHi(@Named("name") String name) {
+    /** A simple endpoint method that uses the Java library created for this project to retrieve
+     * a joke */
+    @ApiMethod(name = "getJoke")
+    public MyBean getJoke() {
+        // Joke source -> created Java library
+        JavaJoker javaJoker = new JavaJoker();
         MyBean response = new MyBean();
-        response.setData("Hi, " + name);
+        response.setData("From BACKEND: " + javaJoker.tellFunnyJoke());
 
         return response;
     }

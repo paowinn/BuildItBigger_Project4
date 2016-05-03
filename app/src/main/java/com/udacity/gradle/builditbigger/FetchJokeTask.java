@@ -1,10 +1,10 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.util.Pair;
-import android.widget.Toast;
 
+import com.example.alvarpao.jokesdisplay.JokeActivity;
 import com.example.alvarpao.myapplication.backend.myApi.MyApi;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -13,13 +13,13 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 
-class FetchJokeTask extends AsyncTask<Pair<Context, String>, Void, String> {
+class FetchJokeTask extends AsyncTask<Context, Void, String> {
 
     private static MyApi myApiService = null;
     private Context context;
 
     @Override
-    protected String doInBackground(Pair<Context, String>... params) {
+    protected String doInBackground(Context... params) {
 
         if(myApiService == null) {
 
@@ -41,11 +41,10 @@ class FetchJokeTask extends AsyncTask<Pair<Context, String>, Void, String> {
             myApiService = builder.build();
         }
 
-        context = params[0].first;
-        String name = params[0].second;
+        context = params[0];
 
         try {
-            return myApiService.sayHi(name).execute().getData();
+            return myApiService.getJoke().execute().getData();
         }
 
         catch (IOException e) {
@@ -55,6 +54,9 @@ class FetchJokeTask extends AsyncTask<Pair<Context, String>, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+        // Display Java joke using activity in created Android library
+        Intent jokeIntent = new Intent(context, JokeActivity.class);
+        jokeIntent.putExtra(JokeActivity.JOKE_KEY, result);
+        context.startActivity(jokeIntent);
     }
 }
