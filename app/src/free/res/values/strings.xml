@@ -1,3 +1,8 @@
 <resources>
     <string name="app_flavor">This is the FREE version of the app!</string>
+    <string name="test_device_id_1">81CE8DD28F612B82D5C6450ADF060F75</string>
+    <string name="test_device_id_2">72956278183EB410BB9365FE57C5FD8B</string>
+    <string name="test_device_id_3">86E26955642178AD4BBA445E9F8E5C68</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

@@ -1,38 +1,97 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.example.alvarpao.jokesdisplay.JokeActivity;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.udacity.gradle.builditbigger.R;
+import com.google.android.gms.ads.InterstitialAd;
 
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements IFetchJokeListener {
 
-    public MainActivityFragment() {
-    }
+    // Wrapper class for AsyncTask
+    AsyncJokeFetcher asyncJokeFetcher;
+    InterstitialAd mInterstitialAd;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
+        asyncJokeFetcher = new AsyncJokeFetcher(this);
 
+        // Create an ad request for banner ad
         AdView mAdView = (AdView) root.findViewById(R.id.adView);
-        // Create an ad request. Check logcat output for the hashed device ID to
-        // get test ads on a physical device. e.g.
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-
-        // Add device IDs for the 3 test devices used
+        // Add device IDs for the 3 test devices and emulator in order to display ads in
+        // these devices
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("81CE8DD28F612B82D5C6450ADF060F75")
-                .addTestDevice("72956278183EB410BB9365FE57C5FD8B")
-                .addTestDevice("86E26955642178AD4BBA445E9F8E5C68")
+                .addTestDevice(getString(R.string.test_device_id_1))
+                .addTestDevice(getString(R.string.test_device_id_2))
+                .addTestDevice(getString(R.string.test_device_id_3))
                 .build();
         mAdView.loadAd(adRequest);
+
+        // Add interstitial ad after clicking the button and before displaying the joke
+        mInterstitialAd = new InterstitialAd(getActivity());
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load a new ad for next time
+                requestNewInterstitial();
+                tellJoke();
+            }
+        });
+
+        // Load an ad to have it ready and show it when the user clicks the button
+        requestNewInterstitial();
+
+        Button btnTellJoke = (Button) root.findViewById(R.id.button_tell_joke);
+        btnTellJoke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    // If the ad for some reason didn't load proceed with displaying the joke
+                    tellJoke();
+                }
+            }
+        });
+
         return root;
     }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice(getString(R.string.test_device_id_1))
+                .addTestDevice(getString(R.string.test_device_id_2))
+                .addTestDevice(getString(R.string.test_device_id_3))
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
+
+    private void tellJoke(){
+        // Execute AsyncTask that fetches joke
+        asyncJokeFetcher.fetchJoke();
+    }
+
+
+    @Override
+    public void fetchJokeCompleted(String joke) {
+        // Display Java joke using activity in created Android library
+        Intent jokeIntent = new Intent(getActivity(), JokeActivity.class);
+        jokeIntent.putExtra(JokeActivity.JOKE_KEY, joke);
+        startActivity(jokeIntent);
+    }
+
 }

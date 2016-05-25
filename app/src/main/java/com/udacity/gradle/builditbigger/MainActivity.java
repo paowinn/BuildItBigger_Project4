@@ -1,25 +1,18 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
-import com.example.alvarpao.jokesdisplay.JokeActivity;
 
 
-public class MainActivity extends ActionBarActivity implements IFetchJokeListener {
+public class MainActivity extends ActionBarActivity {
 
-    // Wrapper class for AsyncTask
-    AsyncJokeFetcher asyncJokeFetcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        asyncJokeFetcher = new AsyncJokeFetcher(this);
     }
 
 
@@ -43,18 +36,5 @@ public class MainActivity extends ActionBarActivity implements IFetchJokeListene
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void tellJoke(View view){
-        // Execute AsyncTask that fetches joke
-        asyncJokeFetcher.fetchJoke();
-    }
-
-    @Override
-    public void fetchJokeCompleted(String joke) {
-        // Display Java joke using activity in created Android library
-        Intent jokeIntent = new Intent(this, JokeActivity.class);
-        jokeIntent.putExtra(JokeActivity.JOKE_KEY, joke);
-        startActivity(jokeIntent);
     }
 }
