@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.example.alvarpao.jokesdisplay.JokeActivity;
 import com.google.android.gms.ads.AdListener;
@@ -19,12 +20,17 @@ public class MainActivityFragment extends Fragment implements IFetchJokeListener
     // Wrapper class for AsyncTask
     AsyncJokeFetcher asyncJokeFetcher;
     InterstitialAd mInterstitialAd;
+    private ProgressBar spinnerProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         asyncJokeFetcher = new AsyncJokeFetcher(this);
+
+        spinnerProgressBar  = (ProgressBar) root.findViewById(R.id.progress_bar);
+        // Initially the progress bar is invisible to the user
+        spinnerProgressBar.setVisibility(View.GONE);
 
         // Create an ad request for banner ad
         AdView mAdView = (AdView) root.findViewById(R.id.adView);
@@ -81,6 +87,9 @@ public class MainActivityFragment extends Fragment implements IFetchJokeListener
     }
 
     private void tellJoke(){
+
+        // Show the progress bar to the user until the joke is displayed
+        spinnerProgressBar.setVisibility(View.VISIBLE);
         // Execute AsyncTask that fetches joke
         asyncJokeFetcher.fetchJoke();
     }
@@ -88,10 +97,13 @@ public class MainActivityFragment extends Fragment implements IFetchJokeListener
 
     @Override
     public void fetchJokeCompleted(String joke) {
+
         // Display Java joke using activity in created Android library
         Intent jokeIntent = new Intent(getActivity(), JokeActivity.class);
         jokeIntent.putExtra(JokeActivity.JOKE_KEY, joke);
         startActivity(jokeIntent);
+        // Once the joke is displayed hide the progress bar
+        spinnerProgressBar.setVisibility(View.GONE);
     }
 
 }
