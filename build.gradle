@@ -1,15 +1,30 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'war'
+apply plugin: 'appengine'
+
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
-
+        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.34'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.38'
+}
+
+appengine {
+    downloadSdk = true
 }
 
 allprojects {
@@ -17,3 +32,51 @@ allprojects {
         jcenter()
     }
 }
+
+// Wrapper task that shuts down the local development server
+task stopAppEngine(dependsOn: ":backend:appengineStop"){
+
+    doLast{
+        println "App Engine Stopped!"
+    }
+}
+
+// Wrapper task that launches the local development server
+task runAppEngine (dependsOn: ":backend:appengineRun") {
+    evaluationDependsOn ":backend"
+
+    // Run server as daemon so it doesn't shut down before
+    // all the tests are run
+    project(":backend"){
+        appengine{
+            daemon true
+        }
+    }
+
+    doLast {
+        println "App Engine Started!"
+    }
+}
+
+// Wrapper task that runs all the connected tests
+task runConnectedTests(dependsOn: ":app:connectedCheck"){
+
+    doLast{
+        println "Connected Tests were ran!"
+    }
+}
+
+// Task that ties all together. Launches the local server, runs the tests and shuts
+// down the server
+task runTests(dependsOn: ["runAppEngine", "runConnectedTests", "stopAppEngine"]){
+
+    // Define the order in which the tasks must run
+    tasks.getByPath("runConnectedTests").mustRunAfter(tasks.getByPath("runAppEngine"))
+    tasks.getByPath("stopAppEngine").mustRunAfter("runConnectedTests")
+}
+
+
+
+
+
+
