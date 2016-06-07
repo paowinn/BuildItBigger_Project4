@@ -38,10 +38,22 @@ public class AsyncJokeFetcher {
 
             if(myApiService == null) {
 
-                // Only do this once
+                // The backend has been deployed to the Google App Engine, using the code below
+                // now to connect to the backend
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                         .setRootUrl("https://builditbigger-1300.appspot.com/_ah/api/");
-                // end options for devappserver
+
+                // Code used to connect to the local development server
+                /*
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("http://10.0.2.2:8080/_ah/api/") // 10.0.2.2 is localhost's IP address in Android emulator
+                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                            @Override
+                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
+                                abstractGoogleClientRequest.setDisableGZipContent(true);
+                            }
+                        });
+                        */
 
                 myApiService = builder.build();
             }
