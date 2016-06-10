@@ -25,13 +25,13 @@ public class MyEndpoint {
 
     /** A simple endpoint method that uses the Java library created for this project to retrieve
      * a joke */
+    // Joke source -> created Java library
+    private JavaJoker javaJoker = new JavaJoker();
+
     @ApiMethod(name = "getJoke")
     public MyBean getJoke() {
-        // Joke source -> created Java library
-        JavaJoker javaJoker = new JavaJoker();
         MyBean response = new MyBean();
-        response.setData("From BACKEND: " + javaJoker.tellFunnyJoke());
-
+        response.setData(javaJoker.tellFunnyJoke());
         return response;
     }
 
