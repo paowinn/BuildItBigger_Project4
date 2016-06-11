@@ -12,9 +12,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/app_flavor_title"
         android:text="@string/app_flavor"
-        android:layout_above="@+id/instructions_text_view"
+        android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
-        android:layout_margin="@dimen/text_view_margin"
+        android:textSize="@dimen/title_text_size"
+        android:layout_margin="@dimen/title_text_view_margin"
         />
 
     <TextView
@@ -22,6 +23,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/instructions_text_view"
         android:text="@string/instructions"
+        android:textSize="@dimen/instructions_text_size"
         android:layout_above="@+id/button_tell_joke"
         android:gravity="center_horizontal"
         android:layout_margin="@dimen/text_view_margin"
@@ -35,6 +37,7 @@
         android:layout_margin="@dimen/button_margin"
         android:padding="@dimen/button_padding"
         android:text="@string/button_text"
+        android:textSize="@dimen/button_text_size"
         />
 
     <ProgressBar

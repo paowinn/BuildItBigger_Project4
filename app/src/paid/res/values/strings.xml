@@ -1,3 +1,3 @@
 <resources>
-    <string name="app_flavor">This is the $$PAID$$ version of the app!</string>
+    <string name="app_flavor">**This is the $$PAID$$ version**</string>
 </resources>
