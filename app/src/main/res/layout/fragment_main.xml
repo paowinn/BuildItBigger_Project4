@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
         android:textSize="@dimen/title_text_size"
-        android:layout_margin="@dimen/title_text_view_margin"
+        android:layout_marginBottom="@dimen/title_text_view_margin"
         />
 
     <TextView
